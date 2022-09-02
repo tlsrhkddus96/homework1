@@ -7,42 +7,37 @@
 
         <h1 class="mt-4">My Page</h1>
 
-        <form th:action="@{/member/modify}" th:method="post">
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" class="form-control" name="id">
+            </div>
 
             <div class="form-group">
-                <label>Email</label>
-                <input type="text" class="form-control" name="email" th:value="${dto.email}" readonly>
+                <label>Name</label>
+                <input type="text" class="form-control" name="name" readonly>
             </div>
 
             <div class="form-group">
                 <label>NickName</label>
-                <input type="text" class="form-control" name="nickname" th:value="${dto.nickname}">
+                <input type="text" class="form-control" name="nickname">
             </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control" name="email" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" class="form-control" name="phone">
+            </div>
+
+
+
 
             <button type="button" class="btn btn-primary modifyBtn">Modify</button>
             <button type="button" class="btn btn-info listBtn">Back</button>
             <button type="button" class="btn btn-danger removeBtn">Remove</button>
-
-        </form>
-
-
-
-
-  <!--          <a th:href="@{/board/modify(bno=${dto.bno}, page=${requestDTO.page})}">
-                <button type="button" class="btn btn-primary">Modify</button>
-            </a>
-
-            <a th:href="@{/board/kidRegister(parentNum=${dto.bno},ref=${dto.ref})}">
-                <button type="button" class="btn btn-primary">KidRegister</button>
-            </a>
-
-            <a th:href="@{/board/list(page=${requestDTO.page})}">
-                <button type="button" class="btn btn-info">List</button>
-            </a>
-        -->
-
-
-
 
 
 
@@ -50,58 +45,76 @@
         <script>
             $(document).ready(function (e) {
 
+                let inputName = $('input[name="name"]');
+                let inputID = $('input[name="id"]');
+                let inputNickname = $('input[name="nickname"]');
+                let inputEmail = $('input[name="email"]');
+                let inputPhone = $('input[name="phone"]');
 
-            });
-        </script>
 
-        <script th:inline="javascript">
+                loadProfile();
+                function loadProfile(){
 
-            let actionForm = $("form"); //form객체
+                    $.getJSON("/member/load",function (dto){
+                        console.log(dto);
 
-            /*  Modify Button */
-            $(".modifyBtn").click(function (){
+                        inputName.val(dto.name);
+                        inputID.val(dto.id);
+                        inputNickname.val(dto.nickname);
+                        inputEmail.val(dto.email);
+                        inputPhone.val(dto.phone);
 
-                if(!confirm("수정하시겠습니까?")){
-                    return;
+                    })
+
                 }
 
-                actionForm
-                    .attr("action","/member/modify")
-                    .attr("method","post")
-                    .submit();
+
+                $(".modifyBtn").click(function (){
+
+                    let data = {
+                        id : inputID.val(),
+                        email : inputEmail.val(),
+                        nickname : inputNickname.val(),
+                        phone: inputPhone.val()
+                    }
+
+                    $.ajax({
+                        url : "/member/modify",
+                        type : "PUT",
+                        data : JSON.stringify(data),
+                        contentType : "application/json; charset=utf-8",
+                        dataType : "text",
+                        success : function (id){
+
+                            alert(id + " 수정 완료");
+                            location.href = "/member/my";
+
+                        }
+                    })
+
+                })
+
+
+                $(".removeBtn").click(function (){
+
+                    let data = {id : inputID.val()};
+
+                    $.ajax({
+                        url: "/member/delete",
+                        type: "DELETE",
+                        data: JSON.stringify(data),
+                        contentType: "application/json;charset=utf-8",
+                        success : function (){
+                            alert("회원삭제완료");
+                            location.href = "/logout";
+                        }
+                    })
+
+                })
+
+
+
             });
-            /*  End Modify */
-
-            /*  Remove Button  */
-            $(".removeBtn").click(function (){
-
-                if(!confirm("삭제하시겠습니까?")){
-                    return;
-                }
-
-                actionForm
-                    .attr("action","/member/remove")
-                    .attr("method","post")
-                    .submit();
-            });
-            /*  End Remove  */
-
-            /*  List Button  */
-            $(".listBtn").click(function (){
-
-                /*let pageInfo = $("input[name='page']");
-
-                actionForm.empty(); //form 태그의 모든 내용 삭제
-                actionForm.append(pageInfo) //목록 페이지에 필요한 페이지정보*/
-
-                actionForm
-                    .attr("action","/member/my")
-                    .attr("method","get")
-                    .submit();
-
-            });
-            /*  End List  */
-
         </script>
 
 

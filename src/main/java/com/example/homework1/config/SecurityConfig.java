@@ -21,10 +21,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
 
         http.authorizeRequests()
-                        .antMatchers("/member").hasRole("USER");
+                        .antMatchers("/member/my").hasRole("USER")
+                        .antMatchers("/member/modify").hasRole("USER");
 
         http.csrf().disable();
-        http.formLogin();
+        http.formLogin().defaultSuccessUrl("/index");
         http.logout().logoutSuccessUrl("/index");
 
     }

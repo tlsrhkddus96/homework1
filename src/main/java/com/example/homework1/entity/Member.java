@@ -41,6 +41,18 @@ public class Member {
 
     }
 
+    public void changeNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void changePhone(String phone){
+        this.phone = phone;
+    }
+
+    public void changeID(String id){
+        this.id = id;
+    }
+
 
 
 }
