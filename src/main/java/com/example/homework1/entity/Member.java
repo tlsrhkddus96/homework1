@@ -49,9 +49,13 @@ public class Member {
         this.phone = phone;
     }
 
-    public void changeID(String id){
-        this.id = id;
+    public void changePassword(String password){
+        this.password = password;
     }
+
+    /*public void changeID(String id){
+        this.id = id;
+    }*/
 
 
 

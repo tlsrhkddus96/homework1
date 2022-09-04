@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = memberRepository.findByEmail(email);
 
-        member.changeID(memberDTO.getId());
+     //   member.changeID(memberDTO.getId());
         member.changeNickname(memberDTO.getNickname());
         member.changePhone(memberDTO.getPhone());
 
@@ -73,5 +73,39 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+    @Override
+    public String checkIdAndEmail(String id, String email) {
+
+        Member member = memberRepository.findById(id);
+
+        if(member == null){
+            return "존재하지 않는 ID 입니다.";
+        }
+
+        String memberEmail = member.getEmail();
+        String memberId = member.getId();
+
+        boolean checkEmail = memberEmail.equals(email);
+        boolean checkId = memberId.equals(id);
+
+        if(checkEmail && checkId){
+            return "확인";
+        }else {
+            return "이메일 또는 아이디가 정확하지 않습니다.";
+        }
+    }
+
+    @Transactional
+    @Override
+    public String changePwd(MemberDTO memberDTO) {
+
+        String enPwd = passwordEncoder.encode(memberDTO.getPassword());
+
+        Member member = memberRepository.findById(memberDTO.getId());
+
+        member.changePassword(enPwd);
+
+        return member.getId();
+    }
 
 }

@@ -28,10 +28,11 @@ public class MainController {
         log.info("Get Register");
     }
 
-    @GetMapping({"/member/my","/member/modify"})
-    public void myProfile(){
+    @GetMapping({"/member/my","/member/modify","/member/123login","/member/forgot"})
+    public void dsa(){
 
     }
+
 
 
 }

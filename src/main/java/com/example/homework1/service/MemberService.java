@@ -13,6 +13,10 @@ public interface MemberService {
 
     void remove(String id);
 
+    String checkIdAndEmail(String id, String email);
+
+    String changePwd(MemberDTO memberDTO);
+
     default MemberDTO entityToDTO(Member member) {
 
         MemberDTO memberDTO = MemberDTO.builder()
