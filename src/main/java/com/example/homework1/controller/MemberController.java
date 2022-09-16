@@ -2,6 +2,7 @@ package com.example.homework1.controller;
 
 import com.example.homework1.config.SecurityConfig;
 import com.example.homework1.dto.MemberDTO;
+import com.example.homework1.encrypt.Encrypt;
 import com.example.homework1.security.dto.AuthMemberDTO;
 import com.example.homework1.security.service.DetailService;
 import com.example.homework1.service.MemberService;
@@ -29,7 +30,7 @@ public class MemberController {
     private final SecurityConfig securityConfig;
 
     @PostMapping("/register")
-    public ResponseEntity<String> MemberRegister(@RequestBody MemberDTO memberDTO){
+    public ResponseEntity<String> MemberRegister(@RequestBody MemberDTO memberDTO) throws Exception {
 
         String id = memberService.register(memberDTO);
 
@@ -37,7 +38,7 @@ public class MemberController {
     }
 
     @GetMapping("/load")
-    public ResponseEntity<MemberDTO> myPage(@AuthenticationPrincipal AuthMemberDTO authMemberDTO){
+    public ResponseEntity<MemberDTO> myPage(@AuthenticationPrincipal AuthMemberDTO authMemberDTO) throws Exception {
 
         String id = authMemberDTO.getId();
 
@@ -85,12 +86,12 @@ public class MemberController {
     }
 
     @PostMapping("/checkIdEmail")
-    public ResponseEntity<String> checkIdEmail(@RequestBody MemberDTO memberDTO){
+    public ResponseEntity<String> checkIdEmail(@RequestBody MemberDTO memberDTO) throws Exception {
 
         String id = memberDTO.getId();
-        String email = memberDTO.getEmail();
+        String enEmail = Encrypt.encryptAES256(memberDTO.getEmail());
 
-        String result = memberService.checkIdAndEmail(id,email);
+        String result = memberService.checkIdAndEmail(id,enEmail);
 
         log.info("Check ID & Email " + result);
 

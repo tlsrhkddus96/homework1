@@ -5,9 +5,9 @@ import com.example.homework1.entity.Member;
 
 public interface MemberService {
 
-    String register(MemberDTO memberDTO);
+    String register(MemberDTO memberDTO) throws Exception;
 
-    MemberDTO getMember(String id);
+    MemberDTO getMember(String id) throws Exception;
 
     String modify(MemberDTO memberDTO);
 

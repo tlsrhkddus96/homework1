@@ -1,5 +1,6 @@
 package com.example.homework1;
 
+import com.example.homework1.encrypt.Encrypt;
 import com.example.homework1.entity.Member;
 import com.example.homework1.entity.MemberRole;
 import com.example.homework1.repository.MemberRepository;
@@ -16,6 +17,7 @@ public class memberTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     @Test
     public void testBCrypt(){
@@ -57,6 +59,23 @@ public class memberTest {
         String id = "1234";
 
         System.out.println( memberRepository.findById(id));
+
+    }
+
+    @Test
+    public void testAES() throws Exception {
+
+      String dsa =  Encrypt.encryptAES256("dsa");
+
+        System.out.println(dsa);
+
+        String deDsa = Encrypt.decryptAES256(dsa);
+
+        System.out.println(deDsa);
+
+
+
+
 
     }
 

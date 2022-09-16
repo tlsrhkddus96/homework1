@@ -1,6 +1,7 @@
 package com.example.homework1.service;
 
 import com.example.homework1.dto.MemberDTO;
+import com.example.homework1.encrypt.Encrypt;
 import com.example.homework1.entity.Member;
 import com.example.homework1.entity.MemberRole;
 import com.example.homework1.repository.MemberRepository;
@@ -19,12 +20,15 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
 
+
     @Override
-    public String register(MemberDTO memberDTO) {
+    public String register(MemberDTO memberDTO) throws Exception {
 
         String enPwd = passwordEncoder.encode(memberDTO.getPassword());
+        String enEmail = Encrypt.encryptAES256(memberDTO.getEmail());
 
         memberDTO.setPassword(enPwd);
+        memberDTO.setEmail(enEmail);
 
         log.info("/MemberServiceImpl  MemberDTO :  " + memberDTO);
 
@@ -37,11 +41,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO getMember(String id) {
+    public MemberDTO getMember(String id) throws Exception {
 
         Member member = memberRepository.findById(id);
 
         MemberDTO memberDTO = entityToDTO(member);
+
+        String decodedEmail = Encrypt.decryptAES256(memberDTO.getEmail());
+        memberDTO.setEmail(decodedEmail);
 
         return memberDTO;
     }
